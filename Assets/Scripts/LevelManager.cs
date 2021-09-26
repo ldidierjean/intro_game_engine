@@ -18,7 +18,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         if (startPoint == null)
-            Debug.LogError("No starting point are defined in level Manager");
+            Debug.LogError("No starting point are defined in level Manager.");
         else
             currentPoint = startPoint;
     }
