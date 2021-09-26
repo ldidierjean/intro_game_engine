@@ -28,7 +28,6 @@ public class LevelManager : MonoBehaviour
         if (newPoint.GetComponent<Checkpoint>() != null)
         {
             currentPoint = newPoint;
-            Debug.Log(newPoint.name);
         }
     }
 }
