@@ -3,10 +3,13 @@ using UnityEngine;
 public class Checkpoint : MonoBehaviour
 {
     public float colorDuration = 2.0f;
+    private bool isActive = false;
 
     [SerializeField] private Material inactivated;
     [SerializeField] private Material activated;
     Renderer renderer;
+
+    private float triggerAnimationTime;
 
     private void Start()
     {
@@ -16,19 +19,16 @@ public class Checkpoint : MonoBehaviour
     {
         LevelManager lm = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         lm.save(gameObject);
-
-        _updateColor();
+        isActive = true;
+        triggerAnimationTime = Time.time;
     }
 
     private void Update()
     {
-        float lerp = Mathf.PingPong(Time.time, colorDuration) / colorDuration;
-        renderer.material.Lerp(inactivated, activated, lerp);
-    }
-
-    private void _updateColor() // see https://forum.unity.com/threads/cant-get-material-lerp-to-work.8936/ for more precise one
-    {
-        for (float lerp = 0; lerp != 1; lerp++)
+        if (isActive && renderer.material.color != activated.color)
+        {
+            float lerp = (Time.time - triggerAnimationTime) / colorDuration;
             renderer.material.Lerp(inactivated, activated, lerp);
-}
+        }
+    }
 }
