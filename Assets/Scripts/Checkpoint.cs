@@ -7,28 +7,32 @@ public class Checkpoint : MonoBehaviour
 
     [SerializeField] private Material inactivated;
     [SerializeField] private Material activated;
-    Renderer renderer;
 
     private float triggerAnimationTime;
 
     private void Start()
     {
-        renderer = GetComponent<Renderer>();
+        if (!GetComponent<Renderer>())
+            Debug.LogError("No renderer attach to the checkpoint");
     }
-    public void isTrigger()
+
+    private void OnTriggerEnter(Collider other)
     {
-        LevelManager lm = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-        lm.save(gameObject);
-        isActive = true;
-        triggerAnimationTime = Time.time;
+        if (other.CompareTag("Player"))
+        {
+            LevelManager lm = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+            lm.save(gameObject.transform.GetChild(0).gameObject.transform.position);
+            isActive = true;
+            triggerAnimationTime = Time.time;
+        }
     }
 
     private void Update()
     {
-        if (isActive && renderer.material.color != activated.color)
+        if (isActive && GetComponent<Renderer>().material.color != activated.color)
         {
             float lerp = (Time.time - triggerAnimationTime) / colorDuration;
-            renderer.material.Lerp(inactivated, activated, lerp);
+            GetComponent<Renderer>().material.Lerp(inactivated, activated, lerp);
         }
     }
 }
