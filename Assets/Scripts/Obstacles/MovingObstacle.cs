@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MovingObstacle : MonoBehaviour
 {
+    [SerializeField] private bool sticky;
     [SerializeField] private float speed;
     [SerializeField] private GameObject[] waypoints;
     private int currentWayPoint = 0;
@@ -14,15 +15,21 @@ public class MovingObstacle : MonoBehaviour
         Move();
     }
 
-    void OnCollisionEnter(Collision other)
+    private void OnCollisionEnter(Collision other)
     {
         Debug.Log("toto");
-        other.gameObject.transform.SetParent(gameObject.transform, true);
+        if (sticky && other.gameObject.tag == "Player")
+        {
+            other.gameObject.transform.SetParent(transform);
+        }
     }
 
     private void OnCollisionExit(Collision other)
     {
-        other.gameObject.transform.parent = null;
+        if (sticky && other.gameObject.tag == "Player")
+        {
+            other.gameObject.transform.SetParent(null);
+        }
     }
 
     private void Move()
