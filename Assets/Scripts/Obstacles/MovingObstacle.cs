@@ -25,8 +25,6 @@ public class MovingObstacle : MonoBehaviour
         other.gameObject.transform.parent = null;
     }
 
-    // might be usefull https://www.youtube.com/c/CodinginFlow/videos
-
     private void Move()
     {
         if (transform.position == waypoints[currentWayPoint].transform.position)
