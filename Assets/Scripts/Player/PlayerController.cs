@@ -81,9 +81,7 @@ public class PlayerController : MonoBehaviour
 
         if (hitInfo.collider == null && isWallrunning)
         {
-            isWallrunning = false;
-            canWallrun = false;
-            currentWallrunCooldown = wallrunCooldown;
+            StopWallrun();
         }
 
         if (hitInfo.collider != null && !controller.isGrounded && canWallrun)
@@ -91,11 +89,7 @@ public class PlayerController : MonoBehaviour
             if (isWallrunning)
             {
                 if (hitInfo.normal != wallNormal)
-                {
-                    isWallrunning = false;
-                    canWallrun = false;
-                    currentWallrunCooldown = wallrunCooldown;
-                }
+                    StopWallrun();
             }
             else if (Vector3.Angle(transform.forward, -hitInfo.normal) < 95f)
             {
@@ -111,13 +105,23 @@ public class PlayerController : MonoBehaviour
             {
                 Vector3 runDirection = Vector3.Cross(wallNormal, Vector3.up);
 
-                runDirection *= wallrunSpeed;
-                currentVelocity = runDirection;
-                currentVerticalSpeed -= (gravity / 3.0f) * Time.deltaTime;
-                runDirection.y = currentVerticalSpeed;
-                controller.Move(runDirection * Time.deltaTime);
+                if (Input.GetButtonDown("Jump"))
+                {
+                    currentVelocity = (wallNormal + runDirection).normalized * 10f;
+                    currentVelocity.y = 0f;
+                    currentVerticalSpeed = 10f;
+                    StopWallrun();
+                }
+                else
+                {
+                    runDirection *= wallrunSpeed;
+                    currentVelocity = runDirection;
+                    currentVerticalSpeed -= (gravity / 3.0f) * Time.deltaTime;
+                    runDirection.y = currentVerticalSpeed;
+                    controller.Move(runDirection * Time.deltaTime);
 
-                currentCamTargetTilt = -wallrunCameraTilt;
+                    currentCamTargetTilt = -wallrunCameraTilt;
+                }
             }
         }
 
@@ -141,8 +145,6 @@ public class PlayerController : MonoBehaviour
             currentVerticalSpeed -= gravity * (currentVerticalSpeed < 0.0f ? 1.3f : 1.0f) * Time.deltaTime;
 
             Vector3 input = (transform.forward * vertical + transform.right * horizontal).normalized;
-            currentVelocity = controller.velocity;
-            currentVelocity.y = 0;
             currentVelocity += input * ((controller.isGrounded ? acceleration : airAcceleration) * Time.deltaTime);
             currentVelocity *= 1 - (controller.isGrounded ? dragFactor : airDragFactor) * Time.deltaTime;
 
@@ -150,6 +152,8 @@ public class PlayerController : MonoBehaviour
 
             move.y += currentVerticalSpeed;
             controller.Move(move * Time.deltaTime);
+            currentVelocity = controller.velocity;
+            currentVelocity.y = 0;
         }
 
         if (controller.isGrounded)
@@ -166,5 +170,12 @@ public class PlayerController : MonoBehaviour
         cam.transform.localRotation = Quaternion.Euler(currentCamEuler.x, currentCamEuler.y, currentCamEuler.z);
 
         cam.transform.position = Vector3.SmoothDamp(cam.transform.position, cameraHolder.position, ref currentCamSmoothVelocity, 0.15f);
+    }
+
+    private void StopWallrun()
+    {
+        isWallrunning = false;
+        canWallrun = false;
+        currentWallrunCooldown = wallrunCooldown;
     }
 }

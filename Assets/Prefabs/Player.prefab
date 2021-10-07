@@ -134,9 +134,9 @@ MonoBehaviour:
   airAcceleration: 5
   dragFactor: 15
   airDragFactor: 0.5
-  gravity: 15
+  gravity: 16
   maxFallSpeed: 10
-  jumpStrength: 8
+  jumpStrength: 10
   wallrunSpeed: 15
   wallrunCooldown: 0.2
   wallrunCameraTilt: 15
@@ -216,7 +216,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
