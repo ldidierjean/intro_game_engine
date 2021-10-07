@@ -8,12 +8,12 @@ public class PlayerController : MonoBehaviour
     public Camera cam;
     [Header("Physics")]
     [Min(0.0f)]
-    public float acceleration = 10.0f;
+    public float acceleration = 150.0f;
     [Min(0.0f)]
-    public float airAcceleration = 4.0f;
-    [Range(0.0f, 1.0f)]
-    public float dragFactor = 0.8f;
-    [Range(0.0f, 1.0f)]
+    public float airAcceleration = 5.0f;
+    [Min(0.0f)]
+    public float dragFactor = 15f;
+    [Min(0.0f)]
     public float airDragFactor = 0.5f;
     [Min(0.0f)]
     public float gravity = 2.0f;
