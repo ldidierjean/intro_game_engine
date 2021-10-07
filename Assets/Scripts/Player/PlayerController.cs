@@ -66,9 +66,10 @@ public class PlayerController : MonoBehaviour
     {
         float mouseX = Input.GetAxisRaw("Mouse X") * viewSensitivity;
         float mouseY = Input.GetAxisRaw("Mouse Y") * viewSensitivity;
-
+        
         transform.rotation *= Quaternion.Euler(0.0f, mouseX, 0.0f);
         currentCamEuler += new Vector3(-mouseY, 0.0f, 0.0f);
+        currentCamEuler.x = Mathf.Clamp(currentCamEuler.x, -90f, 90f);
         cam.transform.localRotation *= Quaternion.Euler(currentCamEuler.x, currentCamEuler.y, currentCamEuler.z);
 
         RaycastHit hitInfo;
