@@ -1,12 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
+    enum WallrunSide
+    {
+        Left,
+        Right
+    }
+    
+    [Header("View")]
     public Transform cameraHolder;
     public Camera cam;
-    [Header("Physics")]
+    
+    [Header("Base movement")]
     [Min(0.0f)]
     public float acceleration = 150.0f;
     [Min(0.0f)]
@@ -18,14 +29,22 @@ public class PlayerController : MonoBehaviour
     [Min(0.0f)]
     public float gravity = 2.0f;
     public float maxFallSpeed = 10.0f;
+    
+    [Header("Wallrun")]
     [Min(1.0f)]
     public float jumpStrength = 6.0f;
     [Min(1.0f)]
     public float wallrunSpeed = 6.0f;
-
     public float wallrunCooldown = 0.2f;
-
     public float wallrunCameraTilt = 15.0f;
+    [Min(0f)]
+    public float wallrunMinimumSpeedToTrigger = 2.0f;
+    [Min(4)]
+    public int wallrunNumberOfRays = 10;
+    public float wallrunRaySweepAngle = 120.0f;
+    [Min(0.1f)]
+    public float rayDistance = 2.0f;
+
     [Header("Input")]
     [Min(1.0f)]
     public float viewSensitivity = 2.0f;
@@ -35,7 +54,9 @@ public class PlayerController : MonoBehaviour
     private float currentVerticalSpeed = 0.0f;
 
     private bool isWallrunning = false;
-    private Vector3 wallNormal = Vector3.zero;
+    private Vector3 currentWallNormal = Vector3.zero;
+    private Vector3 currentWallrunDirection = Vector3.zero;
+    private WallrunSide currentWallrunSide;
 
     private Vector3 currentCamSmoothVelocity = Vector3.zero;
     private Vector3 currentCamEuler = Vector3.zero;
@@ -49,8 +70,7 @@ public class PlayerController : MonoBehaviour
     private bool canWallrun = true;
     private float currentWallrunCooldown = 0.0f;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         controller = GetComponent<CharacterController>();
         if (!controller)
@@ -72,58 +92,7 @@ public class PlayerController : MonoBehaviour
         currentCamEuler.x = Mathf.Clamp(currentCamEuler.x, -90f, 90f);
         cam.transform.localRotation *= Quaternion.Euler(currentCamEuler.x, currentCamEuler.y, currentCamEuler.z);
 
-        RaycastHit hitInfo;
-        if (!isWallrunning)
-            Physics.Raycast(new Ray(transform.position, -transform.right), out hitInfo, 2.0f);
-        else
-            Physics.Raycast(new Ray(transform.position, -wallNormal), out hitInfo, 2.0f);
-
-
-        if (hitInfo.collider == null && isWallrunning)
-        {
-            StopWallrun();
-        }
-
-        if (hitInfo.collider != null && !controller.isGrounded && canWallrun)
-        {
-            if (isWallrunning)
-            {
-                if (hitInfo.normal != wallNormal)
-                    StopWallrun();
-            }
-            else if (Vector3.Angle(transform.forward, -hitInfo.normal) < 95f)
-            {
-                wallNormal = hitInfo.normal;
-                isWallrunning = true;
-                Vector3 previousCamHolderPos = cameraHolder.position;
-                controller.Move((hitInfo.point + hitInfo.normal * (controller.radius + controller.skinWidth + 0.2f)) -
-                                transform.position);
-                cam.transform.position = previousCamHolderPos;
-            }
-
-            if (isWallrunning)
-            {
-                Vector3 runDirection = Vector3.Cross(wallNormal, Vector3.up);
-
-                if (Input.GetButtonDown("Jump"))
-                {
-                    currentVelocity = (wallNormal + runDirection).normalized * 10f;
-                    currentVelocity.y = 0f;
-                    currentVerticalSpeed = 10f;
-                    StopWallrun();
-                }
-                else
-                {
-                    runDirection *= wallrunSpeed;
-                    currentVelocity = runDirection;
-                    currentVerticalSpeed -= (gravity / 3.0f) * Time.deltaTime;
-                    runDirection.y = currentVerticalSpeed;
-                    controller.Move(runDirection * Time.deltaTime);
-
-                    currentCamTargetTilt = -wallrunCameraTilt;
-                }
-            }
-        }
+        HandleWallrun();
 
         if (!isWallrunning)
         {
@@ -133,9 +102,7 @@ public class PlayerController : MonoBehaviour
                 if (currentWallrunCooldown <= 0)
                     canWallrun = true;
             }
-
-            currentCamTargetTilt = 0.0f;
-
+            
             float horizontal = Input.GetAxisRaw("Horizontal");
             float vertical = Input.GetAxisRaw("Vertical");
 
@@ -160,7 +127,7 @@ public class PlayerController : MonoBehaviour
         {
             currentVerticalSpeed = 0.0f;
             if (isWallrunning)
-                isWallrunning = false;
+                StopWallrun();
         }
 
         grounded = controller.isGrounded;
@@ -172,10 +139,124 @@ public class PlayerController : MonoBehaviour
         cam.transform.position = Vector3.SmoothDamp(cam.transform.position, cameraHolder.position, ref currentCamSmoothVelocity, 0.15f);
     }
 
+    void HandleWallrun()
+    {
+        RaycastHit bestHitInfo = new RaycastHit();
+        WallrunSide wallrunSide = WallrunSide.Left;
+        Vector3 runDirection = Vector3.forward;
+
+        if (!isWallrunning && currentVerticalSpeed > 0f && canWallrun && !controller.isGrounded)
+        {
+            RaycastHit currentHitInfo;
+            float bestDistance = Mathf.Infinity;
+            
+            for (int i = 0; i < wallrunNumberOfRays; i++)
+            {
+                float rayAngle = i * wallrunRaySweepAngle / wallrunNumberOfRays - wallrunRaySweepAngle / 2f;
+                Physics.Raycast(new Ray(transform.position,
+                        Quaternion.Euler(0, rayAngle, 0) * transform.forward),
+                    out currentHitInfo, rayDistance);
+
+                if (currentHitInfo.collider != null)
+                {
+                    float velocityAngle = Vector3.SignedAngle(-currentHitInfo.normal, currentVelocity, Vector3.up);
+                    bool validVelocityAngle = false;
+                    float distance = (transform.position - currentHitInfo.point).magnitude;
+
+                    if (Vector3.Dot(transform.right, -currentHitInfo.normal) >= 0f)
+                    {
+                        if (velocityAngle <= -10f && velocityAngle >= -90f)
+                            validVelocityAngle = true;
+                    }
+                    else
+                    {
+                        if (velocityAngle >= 10f && velocityAngle <= 90f)
+                            validVelocityAngle = true;
+                    }
+                    
+                    if (distance < bestDistance &&
+                        Vector3.Angle(transform.forward, -currentHitInfo.normal) <= 90f && validVelocityAngle &&
+                        currentVelocity.magnitude > wallrunMinimumSpeedToTrigger)
+                    {
+                        bestHitInfo = currentHitInfo;
+                        bestDistance = distance;
+                    }
+                }
+            }
+
+            if (bestHitInfo.collider != null)
+            {
+                currentWallrunSide = Vector3.Dot(transform.right, -bestHitInfo.normal) >= 0
+                    ? WallrunSide.Right
+                    : WallrunSide.Left;
+
+                currentCamTargetTilt = currentWallrunSide == WallrunSide.Left ? -wallrunCameraTilt : wallrunCameraTilt;
+                
+                currentWallNormal = bestHitInfo.normal;
+                currentWallrunDirection = currentWallrunSide == WallrunSide.Left ? 
+                    Vector3.Cross(currentWallNormal, Vector3.up) : 
+                    Vector3.Cross(Vector3.up, currentWallNormal);
+                isWallrunning = true;
+                Vector3 previousCamHolderPos = cameraHolder.position;
+                controller.Move((bestHitInfo.point + bestHitInfo.normal * (controller.radius + controller.skinWidth + 0.2f)) -
+                                transform.position);
+                cam.transform.position = previousCamHolderPos;
+            }
+        }
+        else if (isWallrunning)
+            Physics.Raycast(new Ray(transform.position, -currentWallNormal), out bestHitInfo, 2.0f);
+        
+        if (bestHitInfo.collider == null && isWallrunning)
+        {
+            StopWallrun();
+        }
+
+        if (bestHitInfo.collider != null)
+        {
+            if (isWallrunning)
+            {
+                if (bestHitInfo.normal != currentWallNormal)
+                    StopWallrun();
+            }
+            else if (Vector3.Angle(transform.forward, -bestHitInfo.normal) < 80f)
+            {
+            }
+
+            if (isWallrunning)
+            {
+                if (Input.GetButtonDown("Jump"))
+                {
+                    currentVelocity = (currentWallNormal + currentWallrunDirection).normalized * 10f;
+                    currentVelocity.y = 0f;
+                    currentVerticalSpeed = 10f;
+                    StopWallrun();
+                }
+                else
+                {
+                    currentVelocity = currentWallrunDirection * wallrunSpeed;
+                    currentVerticalSpeed -= (gravity / 3.0f) * Time.deltaTime;
+
+                    Vector3 move = currentVelocity;
+
+                    move.y = currentVerticalSpeed;
+                    controller.Move(move * Time.deltaTime);
+
+                    if ((controller.collisionFlags & (CollisionFlags.Sides | CollisionFlags.Above)) != 0)
+                    {
+                        StopWallrun();
+                        currentVerticalSpeed = 0f;
+                        currentVelocity = controller.velocity;
+                    }
+                }
+            }
+        }
+    }
+
     private void StopWallrun()
     {
         isWallrunning = false;
         canWallrun = false;
         currentWallrunCooldown = wallrunCooldown;
+        currentCamTargetTilt = 0.0f;
     }
 }
