@@ -8,10 +8,9 @@ public class DeathZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log(other.name);
-            other.transform.position = new Vector3(10, 10, 10);
-/*            other.gameObject.transform.position = LevelManager.instance.getRespawnPoint();
-            Debug.Log(other.transform.position);
-*/        }
+            other.GetComponent<CharacterController>().enabled = false;
+            other.gameObject.transform.position = LevelManager.instance.getRespawnPoint();
+            other.GetComponent<CharacterController>().enabled = true;
+        }
     }
 }
