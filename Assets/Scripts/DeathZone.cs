@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DeathZone : MonoBehaviour
 {
+    public EventObject respawnEvent;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -11,6 +13,7 @@ public class DeathZone : MonoBehaviour
             other.GetComponent<CharacterController>().enabled = false;
             other.gameObject.transform.position = LevelManager.instance.getRespawnPoint();
             other.GetComponent<CharacterController>().enabled = true;
+            respawnEvent.Trigger();
         }
     }
 }

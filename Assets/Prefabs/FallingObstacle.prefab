@@ -141,3 +141,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeOut: 1
+  yDestruction: 0
+  respawnEvent: {fileID: 11400000, guid: 10464c840c392704da34964228eb9e02, type: 2}
