@@ -5,7 +5,7 @@ using UnityEngine;
 public class FallingObstacle : MonoBehaviour
 {
     [SerializeField] float timeOut;
-    private bool isActivated = false;
+    [SerializeField] float yDestruction;
 
     private void Start()
     {
@@ -13,26 +13,24 @@ public class FallingObstacle : MonoBehaviour
             Debug.LogError("Error: no rigibody is associated with the falling obstacle.");
     }
 
-    private void Update()
-    {
-        if (isActivated)
-        {
-            timeOut -= Time.deltaTime;
-            if (timeOut < 0)
-            {
-                gameObject.GetComponent<Rigidbody>().useGravity = true;
-            }
-
-        }
-        if (transform.position.y <= -10)
-            Destroy(gameObject);
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
-            isActivated = true;
+            StartCoroutine("falling");
         }
+    }
+
+    IEnumerator falling()
+    {
+        Debug.Log("start coroutine");
+        yield return new WaitForSeconds(timeOut);
+        gameObject.GetComponent<Rigidbody>().useGravity = true;
+        if (gameObject.transform.position.y <= yDestruction)
+        {
+            Destroy(gameObject);
+        }
+        else
+            yield return new WaitForSeconds(1);
     }
 }
