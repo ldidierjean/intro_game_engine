@@ -165,12 +165,12 @@ public class PlayerController : MonoBehaviour
 
                     if (Vector3.Dot(transform.right, -currentHitInfo.normal) >= 0f)
                     {
-                        if (velocityAngle <= -10f && velocityAngle >= -90f)
+                        if (velocityAngle <= -30f && velocityAngle >= -90f)
                             validVelocityAngle = true;
                     }
                     else
                     {
-                        if (velocityAngle >= 10f && velocityAngle <= 90f)
+                        if (velocityAngle >= 30f && velocityAngle <= 90f)
                             validVelocityAngle = true;
                     }
                     
