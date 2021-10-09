@@ -15,18 +15,17 @@ public class MovingObstacle : MonoBehaviour
         Move();
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("toto");
-        if (sticky && other.gameObject.tag == "Player")
+        if (sticky && other.CompareTag("Player"))
         {
             other.gameObject.transform.SetParent(transform);
         }
     }
 
-    private void OnCollisionExit(Collision other)
+    private void OnTriggerExit(Collider other)
     {
-        if (sticky && other.gameObject.tag == "Player")
+        if (sticky && other.CompareTag("Player"))
         {
             other.gameObject.transform.SetParent(null);
         }
