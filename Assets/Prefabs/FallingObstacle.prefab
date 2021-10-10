@@ -140,6 +140,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe03a740fea236a4196d31c5886d5f2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeOut: 1
-  yDestruction: 0
   respawnEvent: {fileID: 11400000, guid: 10464c840c392704da34964228eb9e02, type: 2}
+  timeOut: 1
+  yDisapear: 0
