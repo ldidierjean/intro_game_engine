@@ -53,6 +53,9 @@ public class PlayerController : MonoBehaviour
     [Header("Jumping platform")]
     public float bigJumpStrength = 12f;
 
+    [Header("Visual")]
+    public GameObject handPrefab;
+
     private CharacterController controller;
 
     private float currentVerticalSpeed = 0.0f;
@@ -71,6 +74,8 @@ public class PlayerController : MonoBehaviour
 
     private bool grounded = false;
 
+    private GameObject handInstance;
+
     private bool canWallrun = true;
     private float currentWallrunCooldown = 0.0f;
 
@@ -85,6 +90,12 @@ public class PlayerController : MonoBehaviour
         }
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void Start()
+    {
+        handInstance = Instantiate(handPrefab);
+        handInstance.SetActive(false);
     }
 
     // Update is called once per frame
@@ -220,6 +231,11 @@ public class PlayerController : MonoBehaviour
                 controller.Move((bestHitInfo.point + bestHitInfo.normal * (controller.radius + controller.skinWidth + 0.2f)) -
                                 transform.position);
                 cam.transform.position = previousCamHolderPos;
+                
+                handInstance.SetActive(true);
+                Vector3 newScale = handInstance.transform.localScale;
+                newScale.x = currentWallrunSide == WallrunSide.Right ? 1 : -1;
+                handInstance.transform.localScale = newScale;
             }
         }
         else if (isWallrunning)
@@ -271,12 +287,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        if (isWallrunning)
+        {
+            handInstance.transform.position = transform.position - currentWallNormal * (controller.radius + controller.skinWidth + 0.1f);
+            handInstance.transform.rotation = Quaternion.LookRotation(currentWallrunDirection, Vector3.up);
+        }
+    }
+
     private void StopWallrun()
     {
         isWallrunning = false;
         canWallrun = false;
         currentWallrunCooldown = wallrunCooldown;
         currentCamTargetTilt = 0.0f;
+        handInstance.SetActive(false);
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)

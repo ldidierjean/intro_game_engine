@@ -140,11 +140,13 @@ MonoBehaviour:
   wallrunSpeed: 15
   wallrunCooldown: 0.2
   wallrunCameraTilt: 15
-  wallrunMinimumSpeedToTrigger: 2
+  wallrunMinimumSpeedToTrigger: 7
   wallrunNumberOfRays: 10
   wallrunRaySweepAngle: 120
   rayDistance: 2
   viewSensitivity: 2
+  bigJumpStrength: 12
+  handPrefab: {fileID: 6647173325739708841, guid: 3bfd89cb5844aa346b06d18d9ec61b9c, type: 3}
 --- !u!143 &9173310652632532942
 CharacterController:
   m_ObjectHideFlags: 0
