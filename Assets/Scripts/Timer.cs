@@ -10,7 +10,7 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
+        timer = Time.time;
         string a = System.Math.Round(timer, 2).ToString();
 
         char[] separator = new char[1];

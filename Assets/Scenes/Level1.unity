@@ -191,6 +191,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 9173310652632532936, guid: 957c8c277e829a34c836a480ec516c6e, type: 3}
+      propertyPath: bigJumpStrength
+      value: 18
+      objectReference: {fileID: 0}
     - target: {fileID: 9173310652632532943, guid: 957c8c277e829a34c836a480ec516c6e, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -4280,7 +4284,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-263920
+  m_Name: pb_Mesh38174
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
