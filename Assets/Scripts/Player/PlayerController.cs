@@ -49,8 +49,6 @@ public class PlayerController : MonoBehaviour
     [Header("Input")]
     [Min(1.0f)]
     public float viewSensitivity = 2.0f;
-    [Header("Jumping platform")]
-    public float bigJumpStrength = 12f;
 
     [Header("Visual")]
     public GameObject handPrefab;
@@ -295,8 +293,8 @@ public class PlayerController : MonoBehaviour
         handInstance.SetActive(false);
     }
 
-    public void SetBigJumping(float bigJumpStrength)
+    public void SetVerticalSpeed(float newVerticalSpeed)
     {
-        currentVerticalSpeed = bigJumpStrength;
+        currentVerticalSpeed = newVerticalSpeed;
     }
 }

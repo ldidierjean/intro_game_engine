@@ -11,7 +11,7 @@ public class JumpingPad : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerController>().SetBigJumping(BigJumpStrength);
+            other.gameObject.GetComponent<PlayerController>().SetVerticalSpeed(BigJumpStrength);
         }
     }
 }
