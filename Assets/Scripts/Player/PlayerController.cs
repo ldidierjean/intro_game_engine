@@ -49,13 +49,11 @@ public class PlayerController : MonoBehaviour
     [Header("Input")]
     [Min(1.0f)]
     public float viewSensitivity = 2.0f;
-
     [Header("Jumping platform")]
     public float bigJumpStrength = 12f;
 
     [Header("Visual")]
     public GameObject handPrefab;
-
     private CharacterController controller;
 
     private float currentVerticalSpeed = 0.0f;
@@ -78,8 +76,6 @@ public class PlayerController : MonoBehaviour
 
     private bool canWallrun = true;
     private float currentWallrunCooldown = 0.0f;
-
-    private bool isBigJumping = false;
 
     void Awake()
     {
@@ -125,12 +121,6 @@ public class PlayerController : MonoBehaviour
 
             if (controller.isGrounded && Input.GetButton("Jump"))
                 currentVerticalSpeed = jumpStrength;
-
-            if (isBigJumping)
-            {
-                currentVerticalSpeed = bigJumpStrength;
-                isBigJumping = false;
-            }
 
             currentVerticalSpeed -= gravity * (currentVerticalSpeed < 0.0f ? 1.3f : 1.0f) * Time.deltaTime;
 
@@ -305,12 +295,8 @@ public class PlayerController : MonoBehaviour
         handInstance.SetActive(false);
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    public void SetBigJumping(float bigJumpStrength)
     {
-        if (hit.gameObject.CompareTag("JumpingPlatform"))
-        {
-            Debug.Log("Big Jump");
-            isBigJumping = true;
-        }
+        currentVerticalSpeed = bigJumpStrength;
     }
 }
