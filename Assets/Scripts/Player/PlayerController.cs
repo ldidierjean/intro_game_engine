@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
@@ -130,7 +131,8 @@ public class PlayerController : MonoBehaviour
 
             move.y += currentVerticalSpeed;
             controller.Move(move * Time.deltaTime);
-            currentVelocity = controller.velocity;
+            if (controller.velocity.sqrMagnitude < currentVelocity.sqrMagnitude)
+                currentVelocity = controller.velocity;
             currentVelocity.y = 0;
         }
 
@@ -153,8 +155,6 @@ public class PlayerController : MonoBehaviour
     void HandleWallrun()
     {
         RaycastHit bestHitInfo = new RaycastHit();
-        WallrunSide wallrunSide = WallrunSide.Left;
-        Vector3 runDirection = Vector3.forward;
 
         if (!isWallrunning && currentVerticalSpeed > 0f && canWallrun && !controller.isGrounded)
         {
@@ -170,9 +170,16 @@ public class PlayerController : MonoBehaviour
 
                 if (currentHitInfo.collider != null)
                 {
+                    WallrunSide wallrunSide = Vector3.Dot(transform.right, -currentHitInfo.normal) >= 0
+                        ? WallrunSide.Right
+                        : WallrunSide.Left;
+                    Vector3 runDirection = wallrunSide == WallrunSide.Left ? 
+                        Vector3.Cross(currentHitInfo.normal, Vector3.up) : 
+                        Vector3.Cross(Vector3.up, currentHitInfo.normal);
                     float velocityAngle = Vector3.SignedAngle(-currentHitInfo.normal, currentVelocity, Vector3.up);
                     bool validVelocityAngle = false;
                     float distance = (transform.position - currentHitInfo.point).magnitude;
+
 
                     if (Vector3.Dot(transform.right, -currentHitInfo.normal) >= 0f)
                     {
@@ -185,7 +192,8 @@ public class PlayerController : MonoBehaviour
                             validVelocityAngle = true;
                     }
                     
-                    if (distance < bestDistance &&
+                    if (Math.Abs(Vector3.Angle(currentHitInfo.normal, Vector3.up) - 90f) < 0.001f &&
+                        distance < bestDistance &&
                         Vector3.Angle(transform.forward, -currentHitInfo.normal) <= 90f && validVelocityAngle &&
                         currentVelocity.magnitude > wallrunMinimumSpeedToTrigger)
                     {
@@ -245,7 +253,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     currentVelocity = currentWallrunDirection * wallrunSpeed;
-                    currentVerticalSpeed -= (gravity / 3.0f) * Time.deltaTime;
+                    currentVerticalSpeed -= (gravity / 2.0f) * Time.deltaTime;
 
                     Vector3 move = currentVelocity;
 
