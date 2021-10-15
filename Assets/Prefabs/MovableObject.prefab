@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sticky: 1
-  speed: 7
+  speed: 4
   waypoints:
   - {fileID: 8247463117164408403}
   - {fileID: 8247463118027356110}

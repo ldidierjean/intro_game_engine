@@ -8,10 +8,21 @@ using UnityEngine.UI;
 public class Timer : MonoBehaviour
 {
     public Text text;
+    public TimerInstance instance;
 
     private float currentTime = 0f;
     private bool isRunning = false;
-    
+
+    private void OnEnable()
+    {
+        instance.RegisterInstance(this);
+    }
+
+    private void OnDisable()
+    {
+        instance.UnregisterInstance(this);
+    }
+
     void Update()
     {
         if (isRunning)

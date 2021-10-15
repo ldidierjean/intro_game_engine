@@ -128,6 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68f73878344c414ba3885f24f732579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canMove: 1
+  instance: {fileID: 11400000, guid: eeef55f93e097394899a20a8017a2786, type: 2}
   cameraHolder: {fileID: 9173310652246314973}
   cam: {fileID: 9173310653496564773}
   acceleration: 150

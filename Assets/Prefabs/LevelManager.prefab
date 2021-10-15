@@ -43,4 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a086a958fc056c4ba5a6cdaa7380c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerControllerInstance: {fileID: 11400000, guid: eeef55f93e097394899a20a8017a2786, type: 2}
   startPoint: {fileID: 0}
+  levelTimer: {fileID: 11400000, guid: 880b62b36656bca41931b17acddd76ff, type: 2}

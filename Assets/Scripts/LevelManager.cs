@@ -5,8 +5,9 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
+    [SerializeField] private PlayerControllerInstance playerControllerInstance;
     [SerializeField] private GameObject startPoint;
-    [SerializeField] private Timer levelTimer;
+    [SerializeField] private TimerInstance levelTimer;
     private Vector3 currentPoint;
 
     private void Awake()
@@ -22,6 +23,8 @@ public class LevelManager : MonoBehaviour
             Debug.LogError("No starting point are defined in level Manager.");
         else
             currentPoint = startPoint.transform.position;
+
+        playerControllerInstance.Instance.canMove = false;
     }
 
     public void Save(Vector3 newPoint)
@@ -36,6 +39,7 @@ public class LevelManager : MonoBehaviour
 
     public void StartPlay()
     {
-        levelTimer.StartTimer();
+        levelTimer.Instance.StartTimer();
+        playerControllerInstance.Instance.canMove = true;
     }
 }

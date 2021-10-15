@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
         Right
     }
 
+    [HideInInspector] 
+    public bool canMove = true;
+
     public PlayerControllerInstance instance;
     
     [Header("View")]
@@ -32,6 +35,8 @@ public class PlayerController : MonoBehaviour
     [Min(0.0f)]
     public float gravity = 2.0f;
     public float maxFallSpeed = 10.0f;
+    [Min(0.0f)]
+    public float groundStickRayLength = 1.0f;
     
     [Header("Wallrun")]
     [Min(1.0f)]
@@ -110,11 +115,23 @@ public class PlayerController : MonoBehaviour
         float mouseX = Input.GetAxisRaw("Mouse X") * viewSensitivity;
         float mouseY = Input.GetAxisRaw("Mouse Y") * viewSensitivity;
         
+        if (canMove)
+            HandleMovement();
+        
         transform.rotation *= Quaternion.Euler(0.0f, mouseX, 0.0f);
         currentCamEuler += new Vector3(-mouseY, 0.0f, 0.0f);
         currentCamEuler.x = Mathf.Clamp(currentCamEuler.x, -90f, 90f);
         cam.transform.localRotation *= Quaternion.Euler(currentCamEuler.x, currentCamEuler.y, currentCamEuler.z);
 
+        currentCamEuler.z = Mathf.SmoothDampAngle(currentCamEuler.z, currentCamTargetTilt, ref currentCamTiltVelocity, 0.20f);
+
+        cam.transform.localRotation = Quaternion.Euler(currentCamEuler.x, currentCamEuler.y, currentCamEuler.z);
+
+        cam.transform.position = Vector3.SmoothDamp(cam.transform.position, cameraHolder.position, ref currentCamSmoothVelocity, 0.15f);
+    }
+
+    void HandleMovement()
+    {
         HandleWallrun();
 
         if (!isWallrunning)
@@ -129,8 +146,12 @@ public class PlayerController : MonoBehaviour
             float horizontal = Input.GetAxisRaw("Horizontal");
             float vertical = Input.GetAxisRaw("Vertical");
 
+            // Jump
             if (controller.isGrounded && Input.GetButton("Jump"))
+            {
+                grounded = false;
                 currentVerticalSpeed = jumpStrength;
+            }
 
             currentVerticalSpeed -= gravity * (currentVerticalSpeed < 0.0f ? 1.3f : 1.0f) * Time.deltaTime;
 
@@ -145,6 +166,23 @@ public class PlayerController : MonoBehaviour
             if (controller.velocity.sqrMagnitude < currentVelocity.sqrMagnitude)
                 currentVelocity = controller.velocity;
             currentVelocity.y = 0;
+
+            
+            // Avoid player bouncing down slopes
+            if (grounded)
+            {
+                Ray ray = new Ray(transform.position, Vector3.down);
+                Physics.Raycast(ray, out RaycastHit hitInfo, controller.height / 2 + groundStickRayLength);
+
+                if (hitInfo.collider != null && !hitInfo.collider.isTrigger && Vector3.Angle(Vector3.up, hitInfo.normal) <= controller.slopeLimit)
+                {
+                    Vector3 motion = hitInfo.point - transform.position;
+
+                    motion.y += controller.height / 2;
+                    
+                    controller.Move(motion);
+                }
+            }
         }
 
         if (controller.isGrounded)
@@ -155,12 +193,6 @@ public class PlayerController : MonoBehaviour
         }
 
         grounded = controller.isGrounded;
-
-        currentCamEuler.z = Mathf.SmoothDampAngle(currentCamEuler.z, currentCamTargetTilt, ref currentCamTiltVelocity, 0.20f);
-
-        cam.transform.localRotation = Quaternion.Euler(currentCamEuler.x, currentCamEuler.y, currentCamEuler.z);
-
-        cam.transform.position = Vector3.SmoothDamp(cam.transform.position, cameraHolder.position, ref currentCamSmoothVelocity, 0.15f);
     }
 
     void HandleWallrun()
@@ -179,7 +211,7 @@ public class PlayerController : MonoBehaviour
                         Quaternion.Euler(0, rayAngle, 0) * transform.forward),
                     out currentHitInfo, rayDistance);
 
-                if (currentHitInfo.collider != null)
+                if (currentHitInfo.collider != null && !currentHitInfo.collider.isTrigger)
                 {
                     WallrunSide wallrunSide = Vector3.Dot(transform.right, -currentHitInfo.normal) >= 0
                         ? WallrunSide.Right
@@ -252,9 +284,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (bestHitInfo.normal != currentWallNormal)
                     StopWallrun();
-            }
-            else if (Vector3.Angle(transform.forward, -bestHitInfo.normal) < 80f)
-            {
             }
 
             if (isWallrunning)
