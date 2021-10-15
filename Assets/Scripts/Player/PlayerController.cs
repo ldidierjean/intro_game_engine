@@ -149,8 +149,7 @@ public class PlayerController : MonoBehaviour
             // Jump
             if (controller.isGrounded && Input.GetButton("Jump"))
             {
-                grounded = false;
-                currentVerticalSpeed = jumpStrength;
+                Jump(jumpStrength);
             }
 
             currentVerticalSpeed -= gravity * (currentVerticalSpeed < 0.0f ? 1.3f : 1.0f) * Time.deltaTime;
@@ -194,6 +193,12 @@ public class PlayerController : MonoBehaviour
 
         grounded = controller.isGrounded;
     }
+    
+    public void Jump(float strength)
+    {
+        grounded = false;
+        currentVerticalSpeed = strength;
+    }
 
     void HandleWallrun()
     {
@@ -222,7 +227,11 @@ public class PlayerController : MonoBehaviour
                     float velocityAngle = Vector3.SignedAngle(-currentHitInfo.normal, currentVelocity, Vector3.up);
                     bool validVelocityAngle = false;
                     float distance = (transform.position - currentHitInfo.point).magnitude;
-
+                    float lookAngle = Vector3.SignedAngle(runDirection, transform.forward, Vector3.up);
+                    bool validLookDirection = wallrunSide == WallrunSide.Left
+                        ? lookAngle <= 0f && lookAngle >= -60f
+                        : lookAngle >= 0f && lookAngle <= 60f;
+                    
 
                     if (Vector3.Dot(transform.right, -currentHitInfo.normal) >= 0f)
                     {
@@ -238,7 +247,7 @@ public class PlayerController : MonoBehaviour
                     if (Math.Abs(Vector3.Angle(currentHitInfo.normal, Vector3.up) - 90f) < 0.001f &&
                         distance < bestDistance &&
                         Vector3.Angle(transform.forward, -currentHitInfo.normal) <= 90f && validVelocityAngle &&
-                        currentVelocity.magnitude > wallrunMinimumSpeedToTrigger)
+                        currentVelocity.magnitude > wallrunMinimumSpeedToTrigger && validLookDirection)
                     {
                         bestHitInfo = currentHitInfo;
                         bestDistance = distance;
