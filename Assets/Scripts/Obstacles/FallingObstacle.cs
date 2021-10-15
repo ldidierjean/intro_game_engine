@@ -12,6 +12,7 @@ public class FallingObstacle : MonoBehaviour
 
     private Vector3 initialPosition;
     private bool isFalling = false;
+    private bool isTrigger = false;
     private Rigidbody rb;
 
     private void Awake()
@@ -25,11 +26,23 @@ public class FallingObstacle : MonoBehaviour
         initialPosition = gameObject.transform.position;
     }
 
+    private void Update()
+    {
+        if (gameObject.transform.position.y < yDisapear)
+        {
+            rb.useGravity = false;
+            gameObject.GetComponent<Renderer>().enabled = false;
+            rb.velocity = Vector3.zero;
+            isFalling = false;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!isFalling && other.tag == "Player")
         {
             isFalling = true;
+            isTrigger = true;
             StartCoroutine("falling");
         }
     }
@@ -46,23 +59,15 @@ public class FallingObstacle : MonoBehaviour
 
     private void Respawn()
     {
-        isFalling = false;
-        rb.velocity = Vector3.zero;
         rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+        gameObject.GetComponent<Renderer>().enabled = true;
         gameObject.transform.position = initialPosition;
-        gameObject.SetActive(true);
     }
 
     IEnumerator falling()
     {
         yield return new WaitForSeconds(timeOut);
-        gameObject.GetComponent<Rigidbody>().useGravity = true;
-        if (gameObject.transform.position.y < yDisapear)
-        {
-            gameObject.GetComponent<Rigidbody>().useGravity = false;
-            gameObject.SetActive(false);
-        }
-        else
-            yield return new WaitForSeconds(1);
+        rb.useGravity = true;
     }
 }
