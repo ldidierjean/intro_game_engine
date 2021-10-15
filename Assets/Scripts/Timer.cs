@@ -37,9 +37,9 @@ public class Timer : MonoBehaviour
         separator[0] = '.';
         string[] t = a.Split(separator);
         if (t.Length == 1)
-            text.text = t[0] + ":00";
+            text.text = t[0] + ".00";
         else
-            text.text = t[0] + ":" + t[1] + (t[1].Length == 1 ? "0" : "");
+            text.text = t[0] + "." + t[1] + (t[1].Length == 1 ? "0" : "");
     }
 
     public void StartTimer()

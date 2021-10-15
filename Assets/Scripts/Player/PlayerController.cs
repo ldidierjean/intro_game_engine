@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
     public float dragFactor = 15f;
     [Min(0.0f)]
     public float airDragFactor = 0.5f;
+    [Min(1.0f)]
+    public float jumpStrength = 6.0f;
     [Min(0.0f)]
     public float gravity = 2.0f;
     public float maxFallSpeed = 10.0f;
@@ -39,8 +41,6 @@ public class PlayerController : MonoBehaviour
     public float groundStickRayLength = 1.0f;
     
     [Header("Wallrun")]
-    [Min(1.0f)]
-    public float jumpStrength = 6.0f;
     [Min(1.0f)]
     public float wallrunSpeed = 6.0f;
     public float wallrunCooldown = 0.2f;
