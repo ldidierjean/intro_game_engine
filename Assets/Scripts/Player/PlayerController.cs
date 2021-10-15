@@ -154,7 +154,7 @@ public class PlayerController : MonoBehaviour
                 Jump(jumpStrength);
             }
 
-            currentVerticalSpeed -= gravity * (currentVerticalSpeed < 0.0f ? 1.3f : 1.0f) * Time.deltaTime;
+            currentVerticalSpeed -= gravity * (currentVerticalSpeed < 0.0f ? 1.05f : 1.0f) * Time.deltaTime;
 
             Vector3 input = (transform.forward * vertical + transform.right * horizontal).normalized;
             currentVelocity += input * ((controller.isGrounded ? acceleration : airAcceleration) * Time.deltaTime);

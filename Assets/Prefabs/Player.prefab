@@ -132,14 +132,14 @@ MonoBehaviour:
   instance: {fileID: 11400000, guid: eeef55f93e097394899a20a8017a2786, type: 2}
   cameraHolder: {fileID: 9173310652246314973}
   cam: {fileID: 9173310653496564773}
-  acceleration: 150
-  airAcceleration: 5
+  acceleration: 160
+  airAcceleration: 5.2
   dragFactor: 15
   airDragFactor: 0.5
+  jumpStrength: 10
   gravity: 16
   maxFallSpeed: 10
   groundStickRayLength: 1
-  jumpStrength: 10
   wallrunSpeed: 10
   wallrunCooldown: 0.2
   wallrunCameraTilt: 15
