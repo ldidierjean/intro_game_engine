@@ -145,7 +145,6 @@ MonoBehaviour:
   wallrunRaySweepAngle: 120
   rayDistance: 2
   viewSensitivity: 2
-  bigJumpStrength: 12
   handPrefab: {fileID: 6647173325739708841, guid: 3bfd89cb5844aa346b06d18d9ec61b9c, type: 3}
 --- !u!143 &9173310652632532942
 CharacterController:
