@@ -54,17 +54,17 @@ public class PlayerController : MonoBehaviour
     public GameObject handPrefab;
     private CharacterController controller;
 
-    private float currentVerticalSpeed = 0.0f;
+    private float currentVerticalSpeed;
 
-    private bool isWallrunning = false;
+    private bool isWallrunning;
     private Vector3 currentWallNormal = Vector3.zero;
     private Vector3 currentWallrunDirection = Vector3.zero;
     private WallrunSide currentWallrunSide;
 
     private Vector3 currentCamSmoothVelocity = Vector3.zero;
     private Vector3 currentCamEuler = Vector3.zero;
-    private float currentCamTargetTilt = 0.0f;
-    private float currentCamTiltVelocity = 0.0f;
+    private float currentCamTargetTilt;
+    private float currentCamTiltVelocity;
 
     private Vector3 currentVelocity = Vector3.zero;
 
@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
     private GameObject handInstance;
 
     private bool canWallrun = true;
-    private float currentWallrunCooldown = 0.0f;
+    private float currentWallrunCooldown;
 
     void Awake()
     {

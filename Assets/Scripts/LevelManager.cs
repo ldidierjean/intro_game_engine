@@ -6,6 +6,7 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
     [SerializeField] private GameObject startPoint;
+    [SerializeField] private Timer levelTimer;
     private Vector3 currentPoint;
 
     private void Awake()
@@ -23,13 +24,18 @@ public class LevelManager : MonoBehaviour
             currentPoint = startPoint.transform.position;
     }
 
-    public void save(Vector3 newPoint)
+    public void Save(Vector3 newPoint)
     {
         currentPoint = newPoint;
     }
 
-    public Vector3 getRespawnPoint()
+    public Vector3 GetRespawnPoint()
     {
         return currentPoint;
+    }
+
+    public void StartPlay()
+    {
+        levelTimer.StartTimer();
     }
 }
