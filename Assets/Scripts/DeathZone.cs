@@ -11,7 +11,7 @@ public class DeathZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponent<CharacterController>().enabled = false;
-            other.gameObject.transform.position = LevelManager.instance.getRespawnPoint();
+            other.gameObject.transform.position = LevelManager.instance.GetRespawnPoint();
             other.GetComponent<CharacterController>().enabled = true;
             respawnEvent.Trigger();
         }

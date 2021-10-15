@@ -21,7 +21,7 @@ public class Checkpoint : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             LevelManager lm = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-            lm.save(gameObject.transform.GetChild(0).gameObject.transform.position);
+            lm.Save(gameObject.transform.GetChild(0).gameObject.transform.position);
             isActive = true;
             triggerAnimationTime = Time.time;
         }
