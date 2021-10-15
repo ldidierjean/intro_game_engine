@@ -10,6 +10,8 @@ public class Timer : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public TimerInstance instance;
+    public FloatInstance currentTimeHolder;
+    public float CurrentTime => currentTime;
 
     private float currentTime = 0f;
     private bool isRunning = false;
@@ -28,6 +30,7 @@ public class Timer : MonoBehaviour
     {
         if (isRunning)
             currentTime += Time.deltaTime;
+        currentTimeHolder.value = currentTime;
         string a = Math.Round(currentTime, 2).ToString(CultureInfo.InvariantCulture);
 
         char[] separator = new char[1];

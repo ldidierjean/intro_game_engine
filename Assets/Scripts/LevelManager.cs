@@ -5,6 +5,7 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance;
+    [SerializeField] private EndOfLevelMenuInstance endOfLevelMenu;
     [SerializeField] private PlayerControllerInstance playerControllerInstance;
     [SerializeField] private GameObject startPoint;
     [SerializeField] private TimerInstance levelTimer;
@@ -41,5 +42,16 @@ public class LevelManager : MonoBehaviour
     {
         levelTimer.Instance.StartTimer();
         playerControllerInstance.Instance.canMove = true;
+    }
+
+    public void FinishPlay()
+    {
+        levelTimer.Instance.StopTimer();
+        playerControllerInstance.Instance.canMove = false;
+        endOfLevelMenu.Instance.gameObject.SetActive(true);
+        endOfLevelMenu.Instance.RefreshTimer();
+        
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 }

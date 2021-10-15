@@ -138,8 +138,9 @@ MonoBehaviour:
   airDragFactor: 0.5
   gravity: 16
   maxFallSpeed: 10
+  groundStickRayLength: 1
   jumpStrength: 10
-  wallrunSpeed: 15
+  wallrunSpeed: 10
   wallrunCooldown: 0.2
   wallrunCameraTilt: 15
   wallrunMinimumSpeedToTrigger: 7

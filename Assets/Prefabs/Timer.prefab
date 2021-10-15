@@ -149,3 +149,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 8415093985721198384}
   instance: {fileID: 11400000, guid: 880b62b36656bca41931b17acddd76ff, type: 2}
+  currentTimeHolder: {fileID: 11400000, guid: ebfc5a25531b9b741a642394ed26e35f, type: 2}

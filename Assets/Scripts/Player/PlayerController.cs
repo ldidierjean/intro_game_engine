@@ -112,11 +112,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!canMove)
+            return;
+        
         float mouseX = Input.GetAxisRaw("Mouse X") * viewSensitivity;
         float mouseY = Input.GetAxisRaw("Mouse Y") * viewSensitivity;
         
-        if (canMove)
-            HandleMovement();
+        HandleMovement();
         
         transform.rotation *= Quaternion.Euler(0.0f, mouseX, 0.0f);
         currentCamEuler += new Vector3(-mouseY, 0.0f, 0.0f);
