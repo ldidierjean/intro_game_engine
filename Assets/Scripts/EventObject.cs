@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -5,6 +6,11 @@ using UnityEngine.Events;
 public class EventObject : ScriptableObject
 {
     private UnityEvent respawnEvent;
+
+    private void OnEnable()
+    {
+        respawnEvent = new UnityEvent();
+    }
 
     public void Bind(UnityAction callBack)
     {
