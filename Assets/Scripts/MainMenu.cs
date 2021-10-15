@@ -5,23 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    private GameObject menuCanvas;
-    private GameObject settingsCanvas;
-    private GameObject creditCanvas;
+    public GameObject levelsCanvas;
+    public GameObject menuCanvas;
+    public GameObject settingsCanvas;
+    public GameObject creditCanvas;
 
     void Start()
     {
-        menuCanvas = GameObject.Find("MenuCanvas");
-        settingsCanvas = GameObject.Find("SettingsCanvas");
-        creditCanvas = GameObject.Find("CreditsCanvas");
-
+        levelsCanvas.SetActive(false);
         creditCanvas.SetActive(false);
         settingsCanvas.SetActive(false);
     }
 
     public void LaunchGame()
     {
-        SceneManager.LoadScene("Level1");
+        menuCanvas.SetActive(false);
+        levelsCanvas.SetActive(true);
     }
 
     public void SeeSettings()
@@ -44,6 +43,7 @@ public class MainMenu : MonoBehaviour
 
     public void GoBack()
     {
+        levelsCanvas.SetActive(false);
         creditCanvas.SetActive(false);
         settingsCanvas.SetActive(false);
         menuCanvas.SetActive(true);
