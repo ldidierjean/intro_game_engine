@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -902,7 +902,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1483034566759752226, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_text
-      value: BACK
+      value: RETOUR
       objectReference: {fileID: 0}
     - target: {fileID: 4141168913931001686, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_Name
@@ -1094,7 +1094,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1483034566759752226, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_text
-      value: BACK
+      value: RETOUR
       objectReference: {fileID: 0}
     - target: {fileID: 4141168913931001686, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_Name
@@ -1203,7 +1203,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1483034566759752226, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_text
-      value: CREDITS
+      value: "CR\xC9DITS"
       objectReference: {fileID: 0}
     - target: {fileID: 4141168913931001686, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_Name
@@ -1492,7 +1492,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1483034566759752226, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_text
-      value: BACK
+      value: RETOUR
       objectReference: {fileID: 0}
     - target: {fileID: 4141168913931001686, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_Name
@@ -1838,7 +1838,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1483034566759752226, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_text
-      value: EXIT
+      value: QUITTER
       objectReference: {fileID: 0}
     - target: {fileID: 4141168913931001686, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_Name
@@ -2176,7 +2176,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1483034566759752226, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_text
-      value: SETTINGS
+      value: "PARAM\xC8TRES"
       objectReference: {fileID: 0}
     - target: {fileID: 4141168913931001686, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_Name
@@ -3258,7 +3258,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1483034566759752226, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_text
-      value: PLAY
+      value: JOUER
       objectReference: {fileID: 0}
     - target: {fileID: 4141168913931001686, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_Name

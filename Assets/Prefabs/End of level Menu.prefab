@@ -252,7 +252,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Time:'
+  m_text: 'Temps:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -367,9 +367,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1483034566759752226, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_text
-      value: 'GO BACK
-
-'
+      value: MENU PRINCIPAL
       objectReference: {fileID: 0}
     - target: {fileID: 4141168913931001686, guid: 07b92eff339ce574dbb7a2fedeb20878, type: 3}
       propertyPath: m_Name
