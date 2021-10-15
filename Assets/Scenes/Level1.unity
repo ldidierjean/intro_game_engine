@@ -40359,17 +40359,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3038980374581364628, guid: b2a12c2e832c5f44684f8518332eb69c, type: 3}
   m_PrefabInstance: {fileID: 3038980375228290799}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2056507774 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3038980374581364625, guid: b2a12c2e832c5f44684f8518332eb69c, type: 3}
-  m_PrefabInstance: {fileID: 3038980375228290799}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50e7aebdf3dea4c4da1adcabbd919a18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &2065144663
 Mesh:
   m_ObjectHideFlags: 0
@@ -41892,7 +41881,7 @@ PrefabInstance:
     - target: {fileID: 5772474671875407823, guid: d69df58d6deee5942a2730c1091d2c7f, type: 3}
       propertyPath: levelTimer
       value: 
-      objectReference: {fileID: 2056507774}
+      objectReference: {fileID: 11400000, guid: 880b62b36656bca41931b17acddd76ff, type: 2}
     - target: {fileID: 5772474671875407823, guid: d69df58d6deee5942a2730c1091d2c7f, type: 3}
       propertyPath: startPoint
       value: 
