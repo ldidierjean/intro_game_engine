@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
         Left,
         Right
     }
+
+    public PlayerControllerInstance instance;
     
     [Header("View")]
     public Transform cameraHolder;
@@ -74,6 +76,16 @@ public class PlayerController : MonoBehaviour
 
     private bool canWallrun = true;
     private float currentWallrunCooldown;
+
+    void OnEnable()
+    {
+        instance.RegisterInstance(this);
+    }
+
+    void OnDisable()
+    {
+        instance.UnregisterInstance(this);
+    }
 
     void Awake()
     {
