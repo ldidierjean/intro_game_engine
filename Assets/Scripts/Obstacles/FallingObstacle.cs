@@ -12,6 +12,7 @@ public class FallingObstacle : MonoBehaviour
 
     private Vector3 initialPosition;
     private bool isFalling = false;
+    private bool isTrigger = false;
     private Rigidbody rb;
 
     private void Awake()
@@ -41,6 +42,7 @@ public class FallingObstacle : MonoBehaviour
         if (!isFalling && other.tag == "Player")
         {
             isFalling = true;
+            isTrigger = true;
             StartCoroutine("falling");
         }
     }
@@ -57,6 +59,7 @@ public class FallingObstacle : MonoBehaviour
 
     private void Respawn()
     {
+        rb.useGravity = false;
         rb.velocity = Vector3.zero;
         gameObject.GetComponent<Renderer>().enabled = true;
         gameObject.transform.position = initialPosition;
