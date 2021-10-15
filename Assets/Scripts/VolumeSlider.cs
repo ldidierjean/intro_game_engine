@@ -5,9 +5,13 @@ using UnityEngine.Audio;
 
 public class VolumeSlider : MonoBehaviour
 {
-    public void SetVolume(float sliderValue)
+    public void SetMusicVolume(float sliderValue)
     {
-        SettingsData.current.volume = sliderValue;
-        Debug.Log(SettingsData.current.volume);
+        SettingsData.current.musicVolume = sliderValue;
+    }
+
+    public void SetSoundvolume(float sliderValue)
+    {
+        SettingsData.current.soundvolume = sliderValue;
     }
 }

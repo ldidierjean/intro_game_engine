@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class SettingsData : MonoBehaviour
 {
+    public enum Difficulty
+    {
+        Easy, Medium, Hard
+    };
+
     public static SettingsData current;
-    public float volume;
+    public float musicVolume;
+    public float soundvolume;
+    public Difficulty difficulty;
 
     private void Awake()
     {
