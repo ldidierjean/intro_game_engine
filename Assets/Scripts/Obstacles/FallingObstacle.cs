@@ -59,6 +59,7 @@ public class FallingObstacle : MonoBehaviour
 
     private void Respawn()
     {
+        isFalling = false;
         rb.useGravity = false;
         rb.velocity = Vector3.zero;
         gameObject.GetComponent<Renderer>().enabled = true;
